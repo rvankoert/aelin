@@ -23,7 +23,7 @@ echo "$dirs" |
 # summarize results into one file
 output_file="$input_dir/corrupted_jpgs_summary.txt"
 if [ -n "$3" ]; then
-  output_file=$3
+  output_file="$3"
   echo "Setting output_file=$3"
 fi
 echo "" > "$output_file"  # clear output file
