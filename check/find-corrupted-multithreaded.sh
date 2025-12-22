@@ -7,15 +7,19 @@ if [ -z "$input_dir" ] || [ -z "$numthreads" ]; then
     exit 1
 fi
 
-dirs=$(find "$input_dir" -type d)
+dirs=$(find "$input_dir" -type d -mindepth 1)
 # use xargs
 echo "$dirs" |
     xargs -I {} -P $numthreads bash -c '
-    ./find-corrupted-jpg.sh "{}" > {}/corrupted_jpgs.txt
+    ./find-corrupted-jpg.sh "{}" > "{}"/corrupted_jpgs.txt
     '
     
 # summarize results into one file
-output_file="corrupted_jpgs_summary.txt"
+output_file="$input_dir/corrupted_jpgs_summary.txt"
+if [ -n "$3" ]; then
+  output_file=$3
+  echo "Setting output_file=$3"
+fi
 echo "" > "$output_file"  # clear output file
 for dir in $dirs; do
     corrupted_file="${dir}/corrupted_jpgs.txt"
