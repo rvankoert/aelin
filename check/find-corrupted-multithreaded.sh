@@ -1,4 +1,10 @@
 #!/bin/bash
+# find-corrupted-multithreaded.sh
+# Description: checks all jpg images in the given directory and its subdirectories for corruption using multiple threads
+# Usage: ./find-corrupted-multithreaded.sh /PATH/TO/IMAGES NUM_THREADS [OUTPUT_FILE]
+# Warning: all input paths are considered to be without special characters like spaces. This script is provided as is and won't work with paths with special characters.
+# Expected output: a summary file listing check results, by default named corrupted_jpgs_summary.txt in the input directory. Use the optional [OUTPUT_FILE] argument to specify a different output file.
+# Dependencies: ImageMagick, find-corrupted-jpg.sh
 
 input_dir="$1"
 numthreads="$2"
