@@ -115,7 +115,7 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
     for subdir, _, files in os.walk(directory):
         for file in files:
             filename_without_ext = os.path.splitext(file)[0]
-            if file.endswith('.txt') and (file.startswith(prefix) or prefix is None) and filename_without_ext not in excluded_files:
+            if file.endswith('.txt') and (prefix is None or file.startswith(prefix)) and filename_without_ext not in excluded_files:
                 file_path = os.path.join(subdir, file)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
@@ -173,7 +173,7 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
         for file in files_to_include:
             filename_without_ext = os.path.splitext(file)[0]
             # print(file, prefix, file.startswith(prefix), filename_without_ext not in excluded_files)
-            if file.endswith('.txt') and (file.split('/')[-1].startswith(prefix) or prefix is None) and filename_without_ext not in excluded_files:
+            if file.endswith('.txt') and (prefix is None or file.split('/')[-1].startswith(prefix)) and filename_without_ext not in excluded_files:
                 # print(file)
                 files_seen += 1
                 file_path = os.path.join(subdir, file)
