@@ -115,7 +115,7 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
     for subdir, _, files in os.walk(directory):
         for file in files:
             filename_without_ext = os.path.splitext(file)[0]
-            if file.endswith('.txt') and file.startswith(prefix) and filename_without_ext not in excluded_files:
+            if file.endswith('.txt') and (file.startswith(prefix) or prefix is None) and filename_without_ext not in excluded_files:
                 file_path = os.path.join(subdir, file)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
@@ -173,7 +173,7 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
         for file in files_to_include:
             filename_without_ext = os.path.splitext(file)[0]
             # print(file, prefix, file.startswith(prefix), filename_without_ext not in excluded_files)
-            if file.endswith('.txt') and file.split('/')[-1].startswith(prefix) and filename_without_ext not in excluded_files:
+            if file.endswith('.txt') and (file.split('/')[-1].startswith(prefix) or prefix is None) and filename_without_ext not in excluded_files:
                 # print(file)
                 files_seen += 1
                 file_path = os.path.join(subdir, file)
@@ -275,6 +275,7 @@ if __name__ == '__main__':
     parser.add_argument('--tokens_to_ignore', type=int, default=10, help='Number of top tokens to ignore (default: 10)')
     parser.add_argument('--prefix_output', type=str, default=None, help='Prefix the output files with this string')
     parser.add_argument('--predictions_dir', type=str, default=None, help='Directory containing predictions JSON files')
+    parser.add_argument('--input_file_prefix', type=str, default=None, help='Only process files starting with this prefix')
 
     args = parser.parse_args()
 
@@ -284,7 +285,7 @@ if __name__ == '__main__':
     # Find the most common n-grams
     common_ngrams, ngram_files = find_ngrams(
         args.directory,
-        "NL-HaNA_2.09.09",
+        args.input_file_prefix,
         excluded_files,
         n=args.n,
         top_k=args.top_k * 100,
