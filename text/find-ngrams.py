@@ -25,7 +25,6 @@ def load_excluded_files(json_path):
         data = json.load(json_file)
         for item in data:
             filepath = item.get('filename', '')  # Assuming JSON has objects with 'filepath' key
-             # need to check whether the key is called 'filepath' or 'filename', so that the comment and the code is consistent
             if filepath:
                 filename = os.path.splitext(os.path.basename(filepath))[0]
                 excluded_files.add(filename)
