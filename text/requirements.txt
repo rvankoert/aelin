@@ -1,6 +1,6 @@
-click @ file:///home/task_176433223059444/conda-bld/click_1764332278448/work
-joblib @ file:///home/task_175792631885856/conda-bld/joblib_1757926347015/work
-nltk @ file:///home/task_176112110455758/conda-bld/nltk_1761121170384/work
-regex @ file:///home/task_176537854248366/conda-bld/regex_1765378748503/work
-tqdm @ file:///home/task_176286286867676/conda-bld/tqdm_1762863348022/work
-Unidecode @ file:///home/task_176243140270948/conda-bld/unidecode_1762431434411/work
+click
+joblib
+nltk
+regex
+tqdm
+Unidecode
