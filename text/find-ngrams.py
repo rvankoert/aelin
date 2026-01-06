@@ -12,6 +12,7 @@ from unidecode import unidecode
 import glob
 
 nltk.download('punkt')
+nltk.download('punkt_tab')
 
 
 def load_excluded_files(json_path):
@@ -24,7 +25,7 @@ def load_excluded_files(json_path):
     with open(json_path, 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
         for item in data:
-            filepath = item.get('filename', '')  # Assuming JSON has objects with 'filepath' key
+            filepath = item.get('filepath', '')  # Assuming JSON has objects with 'filepath' key
             if filepath:
                 filename = os.path.splitext(os.path.basename(filepath))[0]
                 excluded_files.add(filename)
@@ -122,8 +123,8 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
                     text = clean_text(text)  # Clean the text
                     stop_processing = False
                     # Check for exclude words
-                    for exclude_words_insensitive in exclude_words_insensitive:
-                        if clean_text(exclude_words_insensitive).lower() in text.lower():
+                    for exclude_word_insensitive in exclude_words_insensitive:
+                        if clean_text(exclude_word_insensitive).lower() in text.lower():
                             stop_processing = True
                             break
                     # Check for required words insensitive
@@ -279,7 +280,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # Load excluded filenames from the TSV file
+    # Load excluded filenames from the JSON file
     excluded_files = load_excluded_files(args.exclude)
 
     # Find the most common n-grams
