@@ -111,7 +111,7 @@ def process_file_for_ngrams(file_path, tokens_to_ignore, n):
 def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000, limit_ngrams=100000, num_threads=20,
                 exclude_words=None, required_words=None, tokens_to_ignore=1, exclude_words_insensitive=None,
                 required_words_insensitive=None):
-    """Finds the most common n-grams in text files within a directory."""
+    """Find the most common n-grams in text files within a directory."""
     if exclude_words is None:
         exclude_words = set()
     if required_words is None:
