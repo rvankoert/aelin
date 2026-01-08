@@ -177,10 +177,10 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
     # Identify the top n most common tokens
     tokens_to_ignore = {token for token, _ in token_counter.most_common(tokens_to_ignore)}
     print(f"Top {len(tokens_to_ignore)} tokens to ignore: {', '.join(list(tokens_to_ignore)[:10])}...")
-    # Remove tokens that occur less than 10 times (commented out for testing flexibility)
+    # Remove tokens that occur less than 10 times
     print(f"Total tokens counted: {len(token_counter)}")
     # tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 and token not in tokens_to_ignore}
-    # tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 or token in tokens_to_ignore}
+    tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 or token in tokens_to_ignore}
     print(f"Tokens to ignore: {len(tokens_to_ignore)}")
 
     files_seen = 0
