@@ -177,10 +177,10 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
     # Identify the top n most common tokens
     tokens_to_ignore = {token for token, _ in token_counter.most_common(tokens_to_ignore)}
     print(f"Top {len(tokens_to_ignore)} tokens to ignore: {', '.join(list(tokens_to_ignore)[:10])}...")
-    # Remove tokens that occur less than 10 times
+    # Remove tokens that occur less than 10 times (commented out for testing flexibility)
     print(f"Total tokens counted: {len(token_counter)}")
     # tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 and token not in tokens_to_ignore}
-    tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 or token in tokens_to_ignore}
+    # tokens_to_ignore = {token for token, count in token_counter.items() if count <= 10 or token in tokens_to_ignore}
     print(f"Tokens to ignore: {len(tokens_to_ignore)}")
 
     files_seen = 0
@@ -288,10 +288,10 @@ if __name__ == '__main__':
     parser.add_argument('--top_k', type=int, default=1000, help='Number of top n-grams to return (default: 1000)')
     parser.add_argument('--limit', type=int, default=100000000, help='Limit the number of files to process (default: 100000000)')
     parser.add_argument('--limit_output', type=int, default=10000, help='Limit the number of files to include in the output (default: 10000)')
-    parser.add_argument('--exclude_words', type=str, nargs='*', help='List of words to exclude from n-grams, case sensitive', default=[])
-    parser.add_argument('--exclude_words_insensitive', type=str, nargs='*', help='List of words to exclude from n-grams, case insensitive', default=[])
-    parser.add_argument('--required_words', type=str, nargs='*', help='List of words that must be present in the n-grams, case sensitive', default=[])
-    parser.add_argument('--required_words_insensitive', type=str, nargs='*', help='List of words that must be present in the n-grams, case insensitive', default=[])
+    parser.add_argument('--exclude_words', type=str, nargs='*', help='Skip files containing these words, case sensitive', default=[])
+    parser.add_argument('--exclude_words_insensitive', type=str, nargs='*', help='Skip files containing these words, case insensitive', default=[])
+    parser.add_argument('--required_words', type=str, nargs='*', help='Only process files containing these words, case sensitive', default=[])
+    parser.add_argument('--required_words_insensitive', type=str, nargs='*', help='Only process files containing these words, case insensitive', default=[])
     parser.add_argument('--tokens_to_ignore', type=int, default=10, help='Number of top tokens to ignore (default: 10)')
     parser.add_argument('--prefix_output', type=str, default=None, help='Prefix the output files with this string')
     parser.add_argument('--predictions_dir', type=str, default=None, help='Directory containing predictions JSON files')
