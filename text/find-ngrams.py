@@ -1,3 +1,17 @@
+"""
+find-ngrams.py
+
+Find the most common n-grams in text files within a specified directory.
+
+Usage: 
+    python find-ngrams.py --directory <path_to_directory>
+    python find-ngrams.py --help  # for all paramters
+
+Output: JSON files saved in the "clusters" directory, each containing file paths for the corresponding n-gram.
+
+Dependencies: nltk, tqdm, unidecode
+"""
+
 import os
 import argparse
 import nltk
@@ -66,6 +80,7 @@ def process_ngrams(most_common_ngrams, ngram_files, top_k):
 
 
 def clean_text(text):
+    """Clean the text by removing punctuation and normalizing diacritics."""
     text = ((text.replace('-', '').replace(',', '').replace('.', '').replace('!', '').replace('?', '').replace(';','')
             .replace(':', '').replace('/', '').replace('\\', '')).replace(',', '').replace('„', '').replace('\'', '')
             .replace('(', '').replace(')', '').replace('=',''))
@@ -96,6 +111,7 @@ def process_file_for_ngrams(file_path, tokens_to_ignore, n):
 def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000, limit_ngrams=100000, num_threads=20,
                 exclude_words=None, required_words=None, tokens_to_ignore=1, exclude_words_insensitive=None,
                 required_words_insensitive=None):
+    """Finds the most common n-grams in text files within a directory."""
     if exclude_words is None:
         exclude_words = set()
     if required_words is None:
@@ -122,21 +138,22 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
                     text = f.read()
                     text = clean_text(text)  # Clean the text
                     stop_processing = False
-                    # Check for exclude words
+                    # Check for exclude words case-insensitive
                     for exclude_word_insensitive in exclude_words_insensitive:
                         if clean_text(exclude_word_insensitive).lower() in text.lower():
                             stop_processing = True
                             break
-                    # Check for required words insensitive
+                    # Check for required words case-insensitive
                     for req_word_insensitive in required_words_insensitive:
                         if clean_text(req_word_insensitive).lower() not in text.lower():
                             stop_processing = True
                             break
+                    # Check for exclude words case-sensitive
                     for exclude_word in exclude_words:
                         if clean_text(exclude_word) in text:
                             stop_processing = True
                             break  # Skip this file
-                    # Check for required words
+                    # Check for required words case-sensitive
                     for req_word in required_words:
                         if clean_text(req_word) not in text:
                             stop_processing = True
@@ -208,6 +225,7 @@ def find_ngrams(directory, prefix, excluded_files, n=5, top_k=1000, limit=500000
 
 
 def load_predictions_map(predictions_dir):
+    """Load predictions from JSON files."""
     predictions_map = {}
     for json_file in glob.glob(os.path.expanduser(os.path.join(predictions_dir, "*.json"))):
         try:
@@ -226,6 +244,7 @@ def load_predictions_map(predictions_dir):
 
 
 def save_ngrams_to_json(common_ngrams, output_dir="clusters", required_words=None, exclude_words=None, n=5, prefix_output=None, limit_output=None, predictions_dir=None, exclude_words_insensitive=None, required_words_insensitive=None):
+    """Save the most common n-grams to JSON files."""
     predictions_map = None
     if predictions_dir is not None:
         predictions_map = load_predictions_map(predictions_dir)
@@ -269,10 +288,10 @@ if __name__ == '__main__':
     parser.add_argument('--top_k', type=int, default=1000, help='Number of top n-grams to return (default: 1000)')
     parser.add_argument('--limit', type=int, default=100000000, help='Limit the number of files to process (default: 100000000)')
     parser.add_argument('--limit_output', type=int, default=10000, help='Limit the number of files to include in the output (default: 10000)')
-    parser.add_argument('--exclude_words', type=str, nargs='*', help='List of words to exclude from n-grams', default=[])
-    parser.add_argument('--exclude_words_insensitive', type=str, nargs='*', help='List of words to exclude from n-grams', default=[])
-    parser.add_argument('--required_words', type=str, nargs='*', help='List of words that must be present in the n-grams', default=[])
-    parser.add_argument('--required_words_insensitive', type=str, nargs='*', help='List of words that must be present in the n-grams', default=[])
+    parser.add_argument('--exclude_words', type=str, nargs='*', help='List of words to exclude from n-grams, case sensitive', default=[])
+    parser.add_argument('--exclude_words_insensitive', type=str, nargs='*', help='List of words to exclude from n-grams, case insensitive', default=[])
+    parser.add_argument('--required_words', type=str, nargs='*', help='List of words that must be present in the n-grams, case sensitive', default=[])
+    parser.add_argument('--required_words_insensitive', type=str, nargs='*', help='List of words that must be present in the n-grams, case insensitive', default=[])
     parser.add_argument('--tokens_to_ignore', type=int, default=10, help='Number of top tokens to ignore (default: 10)')
     parser.add_argument('--prefix_output', type=str, default=None, help='Prefix the output files with this string')
     parser.add_argument('--predictions_dir', type=str, default=None, help='Directory containing predictions JSON files')
